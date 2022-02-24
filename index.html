@@ -20,8 +20,66 @@
           }
       }
   </script>
+  <style>
+    /* Popup container - can be anything you want */
+    .popup {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    
+    /* The actual popup */
+    .popup .popuptext {
+      visibility: hidden;
+      width: 160px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -80px;
+    }
+    
+    /* Popup arrow */
+    .popup .popuptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+    }
+    
+    /* Toggle this class - hide and show the popup */
+    .popup .show {
+      visibility: visible;
+      -webkit-animation: fadeIn 1s;
+      animation: fadeIn 1s;
+    }
+    /* Add animation (fade in the popup) */
+    @-webkit-keyframes fadeIn {
+      from {opacity: 0;} 
+      to {opacity: 1;}
+    }
+    
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity:1 ;}
+    }
+    </style>
   </head>
   <body>
+    
     <!-- header section -->
     <header class="header deskHeader">
       <div class="container">
@@ -584,12 +642,16 @@ Holders will have the ability to utilize their Hood Ape in the metaverse<br> beg
 
 
     <!-- road map -->
-    <div
+    <!-- <div
       class="roadmap"
       id="roadmap"
-    >
+    > -->
       <canvas class="threeDRoadMap" id="threeDRoadMap"></canvas>
-    </div>
+      <div class="popup" id="popup">
+        <span class="popuptext" id="myPopup">A Simple Popup!</span>
+      </div>
+
+    <!-- </div> -->
 
     <!-- Community -->
     <div class="Community" style="background-image: url(images/img10.png)">
@@ -975,7 +1037,7 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 				const container = document.createElement( 'div' );
 				document.body.appendChild( container );
 
-				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 100 );
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 200 );
 				camera.position.set( -90, 40, -7 );
 
         const light = new THREE.DirectionalLight( 0xffffff, 1 );
@@ -1002,8 +1064,6 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
         loader.load( 'Road.glb', function ( gltf ) {
           gltf.scene.scale.set(0.01,0.02,0.01)
           gltf.scene.position.set(-1.7, 1.5, -1);
-          // gltf.scene.position.set(0,0,0);
-
           scene.add( gltf.scene );
           console.log(gltf.scene.children);
           render();
@@ -1021,15 +1081,13 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 				renderer.toneMappingExposure = 1;
 				renderer.outputEncoding = THREE.sRGBEncoding;
         stats = new Stats();
-        container.appendChild( stats.dom );
-				// container.appendChild( renderer.domElement );
 				const controls = new OrbitControls( camera, renderer.domElement );
 
         const composer = new EffectComposer(renderer);
 				controls.addEventListener( 'change', render ); // use if there is no animation loop
 				controls.minDistance = 2;
 				controls.maxDistance = 10;
-				controls.target.set( 0, 0, - 0.2 );
+				controls.target.set( 0, 0, 0 );
 				controls.update();
 
         window.addEventListener( 'resize', onWindowResize );
@@ -1038,17 +1096,59 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 			}
 
       function onPointerDown( event ) {
+        
+        
 
+        var canvasRect = canvas.getBoundingClientRect();
+        console.log(canvasRect.top);
         mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        mouse.y = - ( (event.clientY - canvasRect.top) / window.innerHeight ) * 4 + 1;
         raycaster.setFromCamera( mouse, camera );
-
         const intersects = raycaster.intersectObjects( scene.children, true );
-
+        var popup = document.getElementById("myPopup");
         if ( intersects.length > 0 ) {
           const object = intersects[ 0 ].object;
+
+          var d = document.getElementById('popup');
+          d.style.position = "fixed";
+          d.style.left = event.clientX+'px';
+          d.style.top = event.clientY+'px';
+
+          switch (object.name) {
+            case "aon_building":
+              popup.textContent = "To us, the community comes first. The main goal is to make sure your investment and our mint are as successful as possible, to achieve all of our goals. We will also constantly work to release the best value and quality possible. We will announce our drop release date once we are satisfied with the project’s quality and technical parts.";
+              popup.classList.add("show");
+              break;
+            case "grace_building004":
+            popup.textContent = "We will be offering exclusive rewards to our holders throughout the minting process. The rewards include	GIVEAWAY A at X%	GIVEAWAY B at Y%	GIVEAWAY C at Z%";
+            popup.classList.add("show");
+            break;
+            case "grace_building001":
+            popup.textContent = "Your unique NFT will be revealed 72 hours";
+            popup.classList.add("show");
+            break;
+            case "citicorp_center":
+            popup.textContent = "Your unique NFT will be able to participate in our first metaverse launch, a game that will include other recognizable NFTs.";
+            popup.classList.add("show");
+            break;
+            case "willis_tower":
+            popup.textContent = "We care about what you care about! We would like to donate X% of the sales to causes you nominate. We will open up a nomination form for each community member to nominate a cause they care about. After careful review from our team, we will open up voting on the top applications in each category.";
+            popup.classList.add("show");
+            break;
+            case "shanghai_world_financial_center":
+            popup.textContent = "Rock your Hood Ape out in public! We will open up a merch store exclusively for Hood Ape NFT holders.";
+            popup.classList.add("show");
+            break;
+            default:
+              popup.classList.remove("show");
+              break;
+          }
           console.log(object);
+        }else{
+          popup.classList.remove("show");
+
         }
+
       }
 
 			function onWindowResize() {
@@ -1056,7 +1156,7 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
 
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize( window.innerWidth, window.innerHeight/2 );
 
 				render();
 
