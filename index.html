@@ -654,7 +654,8 @@ Holders will have the ability to utilize their Hood Ape in the metaverse<br> beg
     <!-- </div> -->
 
     <!-- Community -->
-    <div class="Community" style="background-image: url(images/img10.png)">
+    <!-- <div class="Community" style="background-image: url(images/img10.png)"> -->
+    <div class="Community">
       <div class="container">
         <div class="roadmapwraptxt">
           <h3><em>JOIN THE</em> COMMUNITY NOW</h3>
@@ -1015,14 +1016,15 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
     }
   });
   </script>
+<!-- three js section start -->
+
   <script type="module">
+
     import * as THREE         from 'three';
     import Stats              from 'https://cdn.jsdelivr.net/npm/three@v0.137.5/examples/jsm/libs/stats.module.js';
-    // import { GUI }            from 'https://cdn.jsdelivr.net/npm/three@v0.137.5/examples/jsm/libs/lil-gui.module.min.js';
     import { OrbitControls }  from 'https://cdn.jsdelivr.net/npm/three@v0.137.5/examples/jsm/controls/OrbitControls.js';
     import  {GLTFLoader}      from 'https://cdn.jsdelivr.net/npm/three@v0.128.0/examples/jsm/loaders/GLTFLoader.js';
     import { RGBELoader }     from 'https://cdn.jsdelivr.net/npm/three@v0.137.5/examples/jsm/loaders/RGBELoader.js';
-
     import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@v0.137.5/examples/jsm/postprocessing/EffectComposer.js';
     import { RenderPass }     from 'https://cdn.jsdelivr.net/npm/three@v0.137.5/examples/jsm/postprocessing/RenderPass.js';
     import { ShaderPass }     from 'https://cdn.jsdelivr.net/npm/three@v0.137.5/examples/jsm/postprocessing/ShaderPass.js';
@@ -1033,9 +1035,20 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
-    
+    const light = new THREE.DirectionalLight( 0xffffff, 1 );
     const canvas = document.querySelector("canvas.threeDRoadMap");
+    const popup = document.getElementById("myPopup");
+    const d = 10;
+    const scene_backround = 0x808080;
 
+    const building_text = {
+      aon_building : 'To us, the community comes first. The main goal is to make sure your investment and our mint are as successful as possible, to achieve all of our goals. We will also constantly work to release the best value and quality possible. We will announce our drop release date once we are satisfied with the project’s quality and technical parts.',
+      grace_building004 : 'We will be offering exclusive rewards to our holders throughout the minting process. The rewards include	GIVEAWAY A at X%	GIVEAWAY B at Y%	GIVEAWAY C at Z%',
+      grace_building001 : 'Your unique NFT will be revealed 72 hours',
+      citicorp_center : 'Your unique NFT will be able to participate in our first metaverse launch, a game that will include other recognizable NFTs.',
+      willis_tower : 'We care about what you care about! We would like to donate X% of the sales to causes you nominate. We will open up a nomination form for each community member to nominate a cause they care about. After careful review from our team, we will open up voting on the top applications in each category.',
+      shanghai_world_financial_center : 'Rock your Hood Ape out in public! We will open up a merch store exclusively for Hood Ape NFT holders.'
+    }
 			init();
 			render();
 
@@ -1045,16 +1058,12 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 				document.body.appendChild( container );
 
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 200 );
-				camera.position.set( -90, 40, -7 );
+				camera.position.set( -90, 20, -7 );
 
-        const light = new THREE.DirectionalLight( 0xffffff, 1 );
-        light.position.set( -90, 40, -10 );
+        light.position.copy( camera.position );
         light.castShadow = true;
         light.shadow.mapSize.width = 1024;
         light.shadow.mapSize.height = 1024;
-
-        const d = 10;
-
         light.shadow.camera.left = - d;
         light.shadow.camera.right = d;
         light.shadow.camera.top = d;
@@ -1064,20 +1073,19 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 				scene = new THREE.Scene();
         scene.add( light );
 
-        scene.background = new THREE.Color( 0xdddddd );
+        scene.background = new THREE.Color( scene_backround );
+
         scene.add( new THREE.AmbientLight( 0xffffff, 1 ) );
 
         const loader = new GLTFLoader().setPath( 'model/' );
+
         loader.load( 'Road.glb', function ( gltf ) {
           gltf.scene.scale.set(0.01,0.02,0.01)
-          gltf.scene.position.set(-1.7, 1.5, -1);
+          gltf.scene.position.set(-3.3, 1, -1);
           scene.add( gltf.scene );
           render();
-
         },(xhr) => {
         }, );
-
-
 
 				renderer = new THREE.WebGLRenderer( {canvas: canvas} );
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -1085,11 +1093,11 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 				renderer.toneMapping = THREE.ReinhardToneMapping;
 				renderer.toneMappingExposure = 1;
 				renderer.outputEncoding = THREE.sRGBEncoding;
-        stats = new Stats();
-				const controls = new OrbitControls( camera, renderer.domElement );
 
+
+				const controls = new OrbitControls( camera, renderer.domElement );
         const composer = new EffectComposer(renderer);
-				controls.addEventListener( 'change', render ); // use if there is no animation loop
+				controls.addEventListener( 'change', render );
 				controls.minDistance = 2;
 				controls.maxDistance = 10;
 				controls.target.set( 0, 0, 0 );
@@ -1097,22 +1105,17 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 
         window.addEventListener( 'resize', onWindowResize );
         window.addEventListener( 'pointerdown', onPointerDown );
-
 			}
 
       function onPointerDown( event ) {
-        
-        
-
         var canvasRect = canvas.getBoundingClientRect();
         mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
         mouse.y = - ( (event.clientY - canvasRect.top) / window.innerHeight ) * 4 + 1;
         raycaster.setFromCamera( mouse, camera );
         const intersects = raycaster.intersectObjects( scene.children, true );
-        var popup = document.getElementById("myPopup");
+
         if ( intersects.length > 0 ) {
           const object = intersects[ 0 ].object;
-
           var d = document.getElementById('popup');
           d.style.position = "fixed";
           d.style.left = event.clientX+'px';
@@ -1120,27 +1123,27 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 
           switch (object.name) {
             case "aon_building":
-              popup.textContent = "To us, the community comes first. The main goal is to make sure your investment and our mint are as successful as possible, to achieve all of our goals. We will also constantly work to release the best value and quality possible. We will announce our drop release date once we are satisfied with the project’s quality and technical parts.";
+              popup.textContent = building_text.aon_building;
               popup.classList.add("show");
               break;
             case "grace_building004":
-            popup.textContent = "We will be offering exclusive rewards to our holders throughout the minting process. The rewards include	GIVEAWAY A at X%	GIVEAWAY B at Y%	GIVEAWAY C at Z%";
+            popup.textContent = building_text.grace_building001;
             popup.classList.add("show");
             break;
             case "grace_building001":
-            popup.textContent = "Your unique NFT will be revealed 72 hours";
+            popup.textContent = building_text.grace_building004;
             popup.classList.add("show");
             break;
             case "citicorp_center":
-            popup.textContent = "Your unique NFT will be able to participate in our first metaverse launch, a game that will include other recognizable NFTs.";
+            popup.textContent = building_text.citicorp_center;
             popup.classList.add("show");
             break;
             case "willis_tower":
-            popup.textContent = "We care about what you care about! We would like to donate X% of the sales to causes you nominate. We will open up a nomination form for each community member to nominate a cause they care about. After careful review from our team, we will open up voting on the top applications in each category.";
+            popup.textContent = building_text.willis_tower;
             popup.classList.add("show");
             break;
             case "shanghai_world_financial_center":
-            popup.textContent = "Rock your Hood Ape out in public! We will open up a merch store exclusively for Hood Ape NFT holders.";
+            popup.textContent = building_text.shanghai_world_financial_center;
             popup.classList.add("show");
             break;
             default:
@@ -1151,74 +1154,69 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
           popup.classList.remove("show");
 
         }
-
       }
 
 			function onWindowResize() {
-
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
-
 				renderer.setSize( window.innerWidth, window.innerHeight/2 );
-
 				render();
-
 			}
+
 			function render() {
-
+        light.position.copy( camera.position );
+        popup.classList.remove("show");
 				renderer.render( scene, camera );
-
 			}
-
   </script>
+<!-- three js section end -->
+
 
   <script>
+    var swiper = new Swiper( '.legendaryslider', {
 
-var swiper = new Swiper( '.legendaryslider', {
+    effect: 'coverflow',
+    loop: true,
+    centeredSlides: true,
+    slidesPerView: 'auto',
+    coverflowEffect: {
+          rotate: 50,
+          stretch: 0,
+          depth: 90,
+          modifier: 1.5,
+          slideShadows: false,
+        },
+        breakpoints: {
+        330: {
+          slidesPerView: 1.5,
+          spaceBetween: 10,
 
-effect: 'coverflow',
-loop: true,
-centeredSlides: true,
-slidesPerView: 'auto',
-coverflowEffect: {
-      rotate: 50,
-      stretch: 0,
-      depth: 90,
-      modifier: 1.5,
-      slideShadows: false,
-    },
-    breakpoints: {
-    330: {
-      slidesPerView: 1.5,
-      spaceBetween: 10,
-
-    },
-    450:{
-      slidesPerView: 2,
-      spaceBetween: 10,
-    },
-    580: {
-      slidesPerView: 2,
-      spaceBetween: 20,
-    },
-    768: {
-      slidesPerView: 3,
-      spaceBetween: 30,
-    },
-    1024: {
-      slidesPerView: 4,
-      spaceBetween: 10,
-    },
-    1204: {
-      slidesPerView: 5,
-      spaceBetween: 10,
-    },
-  },
-  pagination: {
-      el: ".swiper-pagination",
-    },
-} );
-
+        },
+        450:{
+          slidesPerView: 2,
+          spaceBetween: 10,
+        },
+        580: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+        1024: {
+          slidesPerView: 4,
+          spaceBetween: 10,
+        },
+        1204: {
+          slidesPerView: 5,
+          spaceBetween: 10,
+        },
+      },
+      pagination: {
+          el: ".swiper-pagination",
+        },
+    } );
 
     var swiper = new Swiper(".myteam", {
       slidesPerView: 5,
@@ -1278,71 +1276,71 @@ coverflowEffect: {
       once: true,
     });
   </script>
-     <script>
-            var modalTinyNoFooter = new tingle.modal({
-        onClose: function () {
-          console.log("close");
-        },
-        onOpen: function () {
-          console.log("open");
-        },
-        beforeOpen: function () {
-          console.log("before open");
-        },
-        beforeClose: function () {
-          console.log("before close");
-          return true;
-        },
-        cssClass: ["class1", "class2"],
-      });
+  <script>
+        var modalTinyNoFooter = new tingle.modal({
+    onClose: function () {
+      console.log("close");
+    },
+    onOpen: function () {
+      console.log("open");
+    },
+    beforeOpen: function () {
+      console.log("before open");
+    },
+    beforeClose: function () {
+      console.log("before close");
+      return true;
+    },
+    cssClass: ["class1", "class2"],
+  });
 
-      var modalBigContent1 = new tingle.modal();
-      var btn1 = document.querySelector(".benifits_position1");
-      btn1.addEventListener("click", function () {
-        modalBigContent1.open();
-      });
-      modalBigContent1.setContent(
-        document.getElementById("benifits_position1").innerHTML
-      );
+  var modalBigContent1 = new tingle.modal();
+  var btn1 = document.querySelector(".benifits_position1");
+  btn1.addEventListener("click", function () {
+    modalBigContent1.open();
+  });
+  modalBigContent1.setContent(
+    document.getElementById("benifits_position1").innerHTML
+  );
 
-      // second popup
-      var modalBigContent2 = new tingle.modal();
+  // second popup
+  var modalBigContent2 = new tingle.modal();
 
-      var btn2 = document.querySelector(".benifits_position2");
-      btn2.addEventListener("click", function () {
-        modalBigContent2.open();
-      });
-      modalBigContent2.setContent(
-        document.getElementById("benifits_position2").innerHTML
-      );
+  var btn2 = document.querySelector(".benifits_position2");
+  btn2.addEventListener("click", function () {
+    modalBigContent2.open();
+  });
+  modalBigContent2.setContent(
+    document.getElementById("benifits_position2").innerHTML
+  );
 
-      // third popup
-      var modalBigContent3 = new tingle.modal();
-      var btn3 = document.querySelector(".benifits_position3");
-      btn3.addEventListener("click", function () {
-        modalBigContent3.open();
-      });
-      modalBigContent3.setContent(
-        document.getElementById("benifits_position3").innerHTML
-      );
-      // forth popup
-      var modalBigContent4 = new tingle.modal();
-      var btn4 = document.querySelector(".benifits_position4");
-      btn4.addEventListener("click", function () {
-        modalBigContent4.open();
-      });
-      modalBigContent4.setContent(
-        document.getElementById("benifits_position4").innerHTML
-      );
-      // five popup
-      var modalBigContent5 = new tingle.modal();
-      var btn5 = document.querySelector(".benifits_position5");
-      btn5.addEventListener("click", function () {
-        modalBigContent5.open();
-      });
-      modalBigContent5.setContent(
-        document.getElementById("benifits_position5").innerHTML
-      );
-     </script>
+  // third popup
+  var modalBigContent3 = new tingle.modal();
+  var btn3 = document.querySelector(".benifits_position3");
+  btn3.addEventListener("click", function () {
+    modalBigContent3.open();
+  });
+  modalBigContent3.setContent(
+    document.getElementById("benifits_position3").innerHTML
+  );
+  // forth popup
+  var modalBigContent4 = new tingle.modal();
+  var btn4 = document.querySelector(".benifits_position4");
+  btn4.addEventListener("click", function () {
+    modalBigContent4.open();
+  });
+  modalBigContent4.setContent(
+    document.getElementById("benifits_position4").innerHTML
+  );
+  // five popup
+  var modalBigContent5 = new tingle.modal();
+  var btn5 = document.querySelector(".benifits_position5");
+  btn5.addEventListener("click", function () {
+    modalBigContent5.open();
+  });
+  modalBigContent5.setContent(
+    document.getElementById("benifits_position5").innerHTML
+  );
+  </script>
 </body>
 </html>
