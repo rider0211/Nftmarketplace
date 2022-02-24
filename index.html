@@ -1007,7 +1007,14 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
   <script src="js/tingle.min.js"></script>
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
-
+  <script>
+    var popup = document.getElementById("myPopup");
+    document.addEventListener('scroll', function(e) {
+    if(e.isTrusted){
+      popup.classList.remove("show");
+    }
+  });
+  </script>
   <script type="module">
     import * as THREE         from 'three';
     import Stats              from 'https://cdn.jsdelivr.net/npm/three@v0.137.5/examples/jsm/libs/stats.module.js';
@@ -1065,11 +1072,9 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
           gltf.scene.scale.set(0.01,0.02,0.01)
           gltf.scene.position.set(-1.7, 1.5, -1);
           scene.add( gltf.scene );
-          console.log(gltf.scene.children);
           render();
 
         },(xhr) => {
-            console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
         }, );
 
 
@@ -1100,7 +1105,6 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
         
 
         var canvasRect = canvas.getBoundingClientRect();
-        console.log(canvasRect.top);
         mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
         mouse.y = - ( (event.clientY - canvasRect.top) / window.innerHeight ) * 4 + 1;
         raycaster.setFromCamera( mouse, camera );
@@ -1143,7 +1147,6 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
               popup.classList.remove("show");
               break;
           }
-          console.log(object);
         }else{
           popup.classList.remove("show");
 
