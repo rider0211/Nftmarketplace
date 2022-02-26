@@ -36,7 +36,7 @@
     .popup .popuptext {
       visibility: hidden;
       width: 160px;
-      background-color: #555;
+      /* background-color: #555; */
       color: #fff;
       text-align: center;
       border-radius: 6px;
@@ -459,7 +459,17 @@ ENTERING INTO THE HOOD APES COMMUNITY MEANS JOINING A FAMILY FULL OF INVESTORS A
 
         <!-- Pop-up  -->
         <!-- benifits_position1 popup -->
-		
+        <div class="popup"  id="road_modal" style="display:none"> 
+          <h1 id="road_title"></h1>
+          <!--h3>The Story of Winter Beetah</h3-->
+          <center><p id="road_content">
+          <hr>
+          <div class="popimg">
+           <center> <img src="./images/icon5.png" alt=""></center>
+          </div>
+         
+          
+        </div>
         <div class="popup"  id="benifits_position1" style="display:none">
           <h1 >INCREASE THE VALUE OF YOUR NFT</h1>
           <!--h3>SAPPHIRE TOWN</h3-->
@@ -1030,9 +1040,9 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
     import { ShaderPass }     from 'https://cdn.jsdelivr.net/npm/three@v0.137.5/examples/jsm/postprocessing/ShaderPass.js';
     import { OutlinePass }    from 'https://cdn.jsdelivr.net/npm/three@v0.137.5/examples/jsm/postprocessing/OutlinePass.js';
     import { FXAAShader }     from 'https://cdn.jsdelivr.net/npm/three@v0.137.5/examples/jsm/shaders/FXAAShader.js';
-
+    import { TWEEN }          from 'https://cdn.jsdelivr.net/npm/three@v0.128.0/examples/jsm/libs/tween.module.min.js'
     let camera, scene, stats, renderer;
-
+    var controls;
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     const light = new THREE.DirectionalLight( 0xffffff, 1 );
@@ -1049,9 +1059,16 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
       willis_tower : 'We care about what you care about! We would like to donate X% of the sales to causes you nominate. We will open up a nomination form for each community member to nominate a cause they care about. After careful review from our team, we will open up voting on the top applications in each category.',
       shanghai_world_financial_center : 'Rock your Hood Ape out in public! We will open up a merch store exclusively for Hood Ape NFT holders.'
     }
+    const building_cam_pos = {
+      aon_building                    : [-6.920515684007651,2.374473103433332,-1.3337125138455654],
+      grace_building004               : [-6.920515684007651,2.374473103433332,-1.3337125138455654],
+      grace_building001               : [-6.920515684007651,2.374473103433332,-1.3337125138455654],
+      citicorp_center                 : [-6.920515684007651,2.374473103433332,-1.3337125138455654],
+      willis_tower                    : [-6.920515684007651,2.374473103433332,-1.3337125138455654],
+      shanghai_world_financial_center : [-6.920515684007651,2.374473103433332,-1.3337125138455654],
+    }
 			init();
-			render();
-
+      animate();
 			function init() {
 
 				const container = document.createElement( 'div' );
@@ -1096,7 +1113,9 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 				renderer.outputEncoding = THREE.sRGBEncoding;
         renderer.gammaOutput = true;
 
-				const controls = new OrbitControls( camera, renderer.domElement );
+
+
+				controls = new OrbitControls( camera, renderer.domElement );
         const composer = new EffectComposer(renderer);
 				controls.addEventListener( 'change', render );
 				controls.minDistance = 2;
@@ -1106,11 +1125,12 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 
         window.addEventListener( 'resize', onWindowResize );
         window.addEventListener( 'pointerdown', onPointerDown );
+        window.addEventListener('pointermove', onMouseOver);
 			}
 
-      function onPointerDown( event ) {
+      function onMouseOver(event){
         var canvasRect = canvas.getBoundingClientRect();
-        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.x = ( (event.clientX ) / window.innerWidth ) * 2 - 1;
         mouse.y = - ( (event.clientY - canvasRect.top) / window.innerHeight ) * 4 + 1;
         raycaster.setFromCamera( mouse, camera );
         const intersects = raycaster.intersectObjects( scene.children, true );
@@ -1124,27 +1144,27 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 
           switch (object.name) {
             case "aon_building":
-              popup.textContent = building_text.aon_building;
+              popup.textContent = "FIRST PART";
               popup.classList.add("show");
               break;
             case "grace_building004":
-            popup.textContent = building_text.grace_building001;
+            popup.textContent = "GROUP NFT REVEAL";
             popup.classList.add("show");
             break;
             case "grace_building001":
-            popup.textContent = building_text.grace_building004;
+            popup.textContent = "EXCLUSIVE MINTING REWARDS";
             popup.classList.add("show");
             break;
             case "citicorp_center":
-            popup.textContent = building_text.citicorp_center;
+            popup.textContent = "METAVERSE LAUNCH";
             popup.classList.add("show");
             break;
             case "willis_tower":
-            popup.textContent = building_text.willis_tower;
+            popup.textContent = "COMMUNITY VOTING";
             popup.classList.add("show");
             break;
             case "shanghai_world_financial_center":
-            popup.textContent = building_text.shanghai_world_financial_center;
+            popup.textContent = "MERCH STORE";
             popup.classList.add("show");
             break;
             default:
@@ -1157,16 +1177,118 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
         }
       }
 
+      function onPointerDown( event ) {
+        var canvasRect = canvas.getBoundingClientRect();
+        mouse.x = ( (event.clientX) / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( (event.clientY - canvasRect.top) / window.innerHeight ) * 4 + 1;
+        raycaster.setFromCamera( mouse, camera );
+        const intersects = raycaster.intersectObjects( scene.children, true );
+
+        if ( intersects.length > 0 ) {
+          const object = intersects[ 0 ].object;
+          var targetPosition;
+          var duration = 5000;
+          var building = object.name;
+          switch (object.name) {
+            case "aon_building":
+              targetPosition = new THREE.Vector3(-6.920515684007651,2.374473103433332,-1.3337125138455654);
+            tweenCamera( targetPosition, duration, building);
+              break;
+            case "grace_building004":
+              targetPosition = new THREE.Vector3(-9.352713868315497,1.5541087813340284,-0.6012397135914923);
+            tweenCamera( targetPosition, duration, building);
+            break;
+            case "grace_building001":
+              targetPosition = new THREE.Vector3(-8.369632717437534,1.7420275415262658,-0.6509817833574718);
+            tweenCamera( targetPosition, duration, building);
+            break;
+            case "citicorp_center":
+              targetPosition = new THREE.Vector3(-7.547306905446543,2.1222270579596016,0.7306200051426466);
+            tweenCamera( targetPosition, duration, building);
+            break;
+            case "willis_tower":
+              targetPosition = new THREE.Vector3(-5.6776552083425535,3.361326646785062,2.3138419591478883);
+            tweenCamera( targetPosition, duration, building);
+            break;
+            case "shanghai_world_financial_center":
+              targetPosition = new THREE.Vector3(-2.606668705416455,3.477537218693833,-2.4024045875020885);
+            tweenCamera( targetPosition, duration, building);
+            break;
+            default:
+              popup.classList.remove("show");
+              break;
+          }
+        }
+      }
+
+      function tweenCamera( targetPosition, duration, building) {
+        controls.enabled = false;
+        var position = new THREE.Vector3().copy( camera.position );
+        var tween = new TWEEN.Tween( position )
+        .to( targetPosition, duration )
+        .easing( TWEEN.Easing.Cubic.Out )
+        .onUpdate( function () {
+            camera.position.copy( position );
+            camera.lookAt( controls.target );
+        } )
+        .onComplete( function () {
+            camera.position.copy( targetPosition );
+            camera.lookAt( controls.target );
+            controls.enabled = true;
+            var title = document.getElementById('road_title');
+            var content = document.getElementById('road_content');
+            var roadModal = new tingle.modal();
+            switch (building) {
+              case "aon_building":
+                title.textContent = "FIRST PART";
+                content.textContent = building_text.aon_building;
+                break;
+              case "grace_building004":
+                title.textContent = "GROUP NFT REVEAL"
+                content.textContent = building_text.grace_building004;
+                break;
+              case "grace_building001":
+                content.textContent = building_text.grace_building004;
+                title.textContent = "EXCLUSIVE MINTING REWARDS";
+                break;
+              case "citicorp_center":
+                content.textContent = building_text.citicorp_center;
+                title.textContent  = "METAVERSE LAUNCH";
+                break;
+              case "willis_tower":
+                content.textContent = building_text.willis_tower;
+                title.textContent  = "COMMUNITY VOTING";
+                break;
+              case "shanghai_world_financial_center":
+                content.textContent = building_text.shanghai_world_financial_center;
+                title.textContent  = "MERCH STORE";
+                break;
+              default:
+                break;
+            }
+            roadModal.setContent(
+              document.getElementById("road_modal").innerHTML
+            );
+            roadModal.open();
+        } )
+        .start();
+      }
+
 			function onWindowResize() {
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
 				renderer.setSize( window.innerWidth, window.innerHeight/2 );
 				render();
 			}
-
-			function render() {
+      
+      function animate(){
+        requestAnimationFrame(animate);
+        TWEEN.update();
+        render();
+      }
+			
+      function render() {
         light.position.copy( camera.position );
-        popup.classList.remove("show");
 				renderer.render( scene, camera );
 			}
   </script>
@@ -1294,6 +1416,8 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
     },
     cssClass: ["class1", "class2"],
   });
+
+
 
   var modalBigContent1 = new tingle.modal();
   var btn1 = document.querySelector(".benifits_position1");
