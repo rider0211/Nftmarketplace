@@ -1118,6 +1118,10 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 				controls = new OrbitControls( camera, renderer.domElement );
         const composer = new EffectComposer(renderer);
 				controls.addEventListener( 'change', render );
+        controls.mouseButtons = {
+          LEFT: THREE.MOUSE.ROTATE,
+          MIDDLE: THREE.MOUSE.DOLLY,
+        }
 				controls.minDistance = 2;
 				controls.maxDistance = 10;
 				controls.target.set( 0, 0, 0 );
