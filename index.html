@@ -1075,7 +1075,7 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
 
         scene.background = new THREE.Color( scene_backround );
 
-        scene.add( new THREE.AmbientLight( 0xffffff, 1 ) );
+        scene.add( new THREE.AmbientLight( 0xffffff, 0.1 ) );
 
         const loader = new GLTFLoader().setPath( 'model/' );
 
@@ -1085,15 +1085,16 @@ TOGETHER, LET’S BUILD THE BEST EXCLUSIVE CLUB THAT HAS NEVER SEEN BEFORE.
           scene.add( gltf.scene );
           render();
         },(xhr) => {
+          console.log(xhr);
         }, );
 
 				renderer = new THREE.WebGLRenderer( {canvas: canvas} );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight/2 );
 				renderer.toneMapping = THREE.ReinhardToneMapping;
-				renderer.toneMappingExposure = 1;
+				renderer.toneMappingExposure = 5;
 				renderer.outputEncoding = THREE.sRGBEncoding;
-
+        renderer.gammaOutput = true;
 
 				const controls = new OrbitControls( camera, renderer.domElement );
         const composer = new EffectComposer(renderer);
